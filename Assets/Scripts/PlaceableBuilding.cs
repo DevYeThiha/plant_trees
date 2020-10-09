@@ -28,7 +28,7 @@ public class PlaceableBuilding : MonoBehaviour
 
     public void SetSelected(bool s){
         isSelected = s;
-         Debug.Log(isSelected);
+        //  Debug.Log(isSelected);
     }
 
 

@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class BuildingManager : MonoBehaviour
 {
-    
     public GameObject[] buildings;
     public GameState gameState;
     public List<GameObject> createdbuildings;
     private BuildingPlacement buildingPlacement;
+    
     // private BuildingDelete buildingDelete;
     // private MoveBuilding moveBuilding;
     private const string ATTRIBUTE_SEPERATOR = "#Attribute-VALUE#";
@@ -18,6 +18,8 @@ public class BuildingManager : MonoBehaviour
     void Start()
     {
         buildingPlacement = GetComponent<BuildingPlacement>();
+        gameState.currentEvent = 0;
+        gameState.tree = 0;
         // buildingDelete = GetComponent<BuildingDelete>();    
     }
 
@@ -36,11 +38,32 @@ public class BuildingManager : MonoBehaviour
 
     public void plantTree(){
         gameState.currentEvent = 1;
-        buildingPlacement.SetItem(findBuilding(treeState()));      
+        buildingPlacement.SetItem(buildings[gameState.tree]);      
     }
     public void DeleteTree(){
         gameState.currentEvent = 2;
-        buildingPlacement.SetItem(findBuilding(treeState()));       
+        buildingPlacement.SetItem(buildings[gameState.tree]);       
+    }
+    public void MoveTree(){
+        gameState.currentEvent = 3;
+        buildingPlacement.SetItem(buildings[gameState.tree]);       
+    }
+
+    public void changeTree(int tree){
+        gameState.tree = tree;
+        if(gameState.currentEvent == 1){
+            buildingPlacement.SetItem(buildings[gameState.tree]);      
+        }
+    }
+
+    public void changeView(int camera){
+        // transform.position = transform.position + new Vector3(1, 0, 3);
+        // transform.position = new Vector3(1f, 0f, 3f);
+        // transform.eulerAngles = new Vector3 (90f, 1f, 0);
+        // transform.Rotate(xAngle, yAngle, zAngle, Space.World);
+        // transform.rotate(90,0,0);
+        GetComponent<Camera>().transform.position = new Vector3(1f, 0f, 3f);
+      
     }
 
 
@@ -67,12 +90,8 @@ public class BuildingManager : MonoBehaviour
     
     
     
-    private string cameraState(){
-        return File.ReadAllText(Application.dataPath + "/camera.txt");
-    }
-    private string treeState(){
-        return File.ReadAllText(Application.dataPath + "/tree.txt");
-    }
+  
+
     public GameObject findBuilding(string BuildingName){
         switch(BuildingName){
             case ("tree"):

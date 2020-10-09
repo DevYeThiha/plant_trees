@@ -25,14 +25,21 @@ public class BuildingPlacement : MonoBehaviour
                 
                 RaycastHit hit = new RaycastHit();
                 Ray ray = new Ray(new Vector3(p.x,8,p.z), Vector3.down);
+                buildingsMask = LayerMask.GetMask("Building");
                 if(Physics.Raycast(ray, out hit, Mathf.Infinity, buildingsMask)){
                     if(placeableBuildingOld != null){
                         placeableBuildingOld.SetSelected(false);
                     }
-                    Debug.Log("working");
-                    Debug.Log(hit.collider.gameObject);
-                    hit.collider.gameObject.GetComponent<PlaceableBuilding>().SetSelected(true);
-                    placeableBuildingOld = hit.collider.gameObject.GetComponent<PlaceableBuilding>();
+                    if(gameState.currentEvent == 2){
+                        Destroy(hit.collider.gameObject);
+                    }else if(gameState.currentEvent == 3){
+                        Debug.Log(hit.collider.gameObject.transform);
+                        hasPlaced = false;
+                        currentBuilding = hit.collider.gameObject.transform;
+                    }
+                    placeableBuildingOld = null;
+                    // hit.collider.gameObject.GetComponent<PlaceableBuilding>().SetSelected(true);
+                    // placeableBuildingOld = hit.collider.gameObject.GetComponent<PlaceableBuilding>();
                 }else {
                   
                     
@@ -50,7 +57,7 @@ public class BuildingPlacement : MonoBehaviour
         }
     }
     public void show(){
-         if(!newBuilding && (gameState.currentEvent == 1)){
+         if(!newBuilding && (gameState.currentEvent == 1) && building){
              hasPlaced = false;
             SetItem(building);
         }
@@ -91,7 +98,10 @@ public class BuildingPlacement : MonoBehaviour
             if((Input.GetMouseButtonDown(0)) && (!hasPlaced)){
                 if(IsLegalPosition()){
                     hasPlaced = true;
-                    SetItem(building);
+                    if(gameState.currentEvent == 1){
+                         SetItem(building);
+                    }
+                   
                    
                     // Debug.Log(currentBuilding.position);
                     // SaveData(objectName,currentBuilding.position);
