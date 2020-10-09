@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ public class BuildingPlacement : MonoBehaviour
     private bool hasPlaced;
     public LayerMask buildingsMask;
     private PlaceableBuilding placeableBuildingOld;
+    public List<GameObject> createdbuildings;
     private  GameObject newBuilding;
     private GameObject building;
     public GameState gameState;
@@ -31,9 +31,10 @@ public class BuildingPlacement : MonoBehaviour
                         placeableBuildingOld.SetSelected(false);
                     }
                     if(gameState.currentEvent == 2){
+                        createdbuildings.Remove(hit.collider.gameObject);
                         Destroy(hit.collider.gameObject);
                     }else if(gameState.currentEvent == 3){
-                        Debug.Log(hit.collider.gameObject.transform);
+                        Debug.Log(createdbuildings.Find(x => x == hit.collider.gameObject));
                         hasPlaced = false;
                         currentBuilding = hit.collider.gameObject.transform;
                     }
@@ -71,7 +72,7 @@ public class BuildingPlacement : MonoBehaviour
         return true;
     }
 
-    public GameObject SetItem(GameObject b){
+    public void SetItem(GameObject b){
         hasPlaced = false;
         building = b;
         newBuilding = (GameObject)Instantiate(building);
@@ -79,19 +80,20 @@ public class BuildingPlacement : MonoBehaviour
         newBuilding.transform.parent = gameObject.transform;
         currentBuilding = (newBuilding).transform;
         placeableBuilding = currentBuilding.GetComponent<PlaceableBuilding>();
-        return newBuilding;
     }
 
     public void PlantTree(Vector3 p){
         currentBuilding.position = new Vector3(p.x,(float)0.5,p.z);
-            if(Input.GetKeyDown(KeyCode.Escape)){
-                Destroy(newBuilding);
-            }
+            // if(Input.GetKeyDown(KeyCode.Escape)){
+            //     Destroy(newBuilding);
+            // }
             if((Input.GetMouseButtonDown(0)) && (!hasPlaced)){
                 if(IsLegalPosition()){
                     hasPlaced = true;
+                    
                     if(gameState.currentEvent == 1){
-                         SetItem(building);
+                        createdbuildings.Add(newBuilding);
+                        SetItem(building);
                     }
                    
                    
@@ -101,7 +103,18 @@ public class BuildingPlacement : MonoBehaviour
                 }       
             }
     }
-   
+
+    public List<GameObject> getCreatedBuildings(){
+         return createdbuildings; 
+    }
+    
+    public void loadBuildings(string name, GameObject building, string px, string pz){
+        GameObject loadBuilding = (GameObject)Instantiate(building);
+        loadBuilding.name  = name;
+        loadBuilding.transform.parent = gameObject.transform;
+        loadBuilding.transform.localPosition = new Vector3(float.Parse(px),(float)0.5, float.Parse(pz));
+        hasPlaced = true;
+    }
 
 
 }

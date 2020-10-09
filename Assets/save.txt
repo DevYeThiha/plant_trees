@@ -1,1 +1,1 @@
-tree#Attribute-VALUE#-1.920645#Attribute-VALUE#1.20619#Object-VALUE#apple#Attribute-VALUE#1.517929#Attribute-VALUE#0.958365
+tree0#Attribute-VALUE#t#Attribute-VALUE#-2.547261#Attribute-VALUE#8.600001#Object-VALUE#apple3#Attribute-VALUE#a#Attribute-VALUE#-0.8198082#Attribute-VALUE#8.600002#Object-VALUE#orange4#Attribute-VALUE#o#Attribute-VALUE#1.551779#Attribute-VALUE#8.600001
