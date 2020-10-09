@@ -71,23 +71,15 @@ public class BuildingPlacement : MonoBehaviour
         return true;
     }
 
-    public void SetItem(GameObject b){
+    public GameObject SetItem(GameObject b){
         hasPlaced = false;
         building = b;
-        createBuilding();
-    }
-    public void DeleteItem(GameObject b){
-         hasPlaced = false;
-        building = b;
-        // createBuilding();
-    }
-
-    public void createBuilding(){
         newBuilding = (GameObject)Instantiate(building);
         newBuilding.name  = newBuilding.name.Remove(newBuilding.name.Length - 7) + transform.childCount;
         newBuilding.transform.parent = gameObject.transform;
         currentBuilding = (newBuilding).transform;
         placeableBuilding = currentBuilding.GetComponent<PlaceableBuilding>();
+        return newBuilding;
     }
 
     public void PlantTree(Vector3 p){
