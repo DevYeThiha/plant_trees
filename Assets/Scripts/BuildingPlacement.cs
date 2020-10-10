@@ -16,43 +16,43 @@ public class BuildingPlacement : MonoBehaviour
     public Camera mainCamera;
 
     void Update(){
-        //  Vector3 m = Input.mousePosition;
-        // //  Debug.Log(GameObject.Find("MainCamera").transform.localPosition.y);
-        // m = new Vector3(m.x,m.y,mainCamera.transform.position.y);
-        // Vector3 p = transform.parent.GetComponentInChildren<Camera>().ScreenToWorldPoint(m);
         Ray pointerRay = mainCamera.ScreenPointToRay (Input.mousePosition);
         RaycastHit hitInfo;
 
-        if(Physics.Raycast(pointerRay, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground"))){
-            Vector3 p = hitInfo.point;
-            if(currentBuilding != null && !hasPlaced){
+        if((Physics.Raycast(pointerRay, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Building")))||(Physics.Raycast(pointerRay, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Ground")))){       
+            Vector3 p = hitInfo.point;       
+             if(currentBuilding != null && !hasPlaced){
                 PlantTree(p);
             }else{
-                if(Input.GetMouseButtonDown(0)){
-                    RaycastHit hit = new RaycastHit();
-                    Ray ray = new Ray(new Vector3(p.x,8,p.z), Vector3.down);
-                    buildingsMask = LayerMask.GetMask("Building");
-                    if(Physics.Raycast(ray, out hit, Mathf.Infinity, buildingsMask)){
-                        if(placeableBuildingOld != null){
-                            placeableBuildingOld.SetSelected(false);
-                        }
-                        if(gameState.currentEvent == 2){
-                            createdbuildings.Remove(hit.collider.gameObject);
-                            Destroy(hit.collider.gameObject);
-                        }else if(gameState.currentEvent == 3){
-                            Debug.Log(createdbuildings.Find(x => x == hit.collider.gameObject));
-                            hasPlaced = false;
-                            currentBuilding = hit.collider.gameObject.transform;
-                        }
-                        placeableBuildingOld = null;
-                }
+               manipulateTree(p);
             }
-        }
         }
         
         
       
         
+    }
+
+    public void manipulateTree(Vector3 p){
+        if(Input.GetMouseButtonDown(0)){
+            RaycastHit hit = new RaycastHit();
+            Ray ray = new Ray(new Vector3(p.x,8,p.z), Vector3.down);
+            buildingsMask = LayerMask.GetMask("Building");
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, buildingsMask)){
+                if(placeableBuildingOld != null){
+                    placeableBuildingOld.SetSelected(false);
+                }
+                if(gameState.currentEvent == 2){
+                    createdbuildings.Remove(hit.collider.gameObject);
+                    Destroy(hit.collider.gameObject);
+                }else if(gameState.currentEvent == 3){
+                    // Debug.Log(createdbuildings.Find(x => x == hit.collider.gameObject));
+                    hasPlaced = false;
+                    currentBuilding = hit.collider.gameObject.transform;
+                }
+                placeableBuildingOld = null;
+            }
+        }
     }
 
     public void hide(){
