@@ -28,6 +28,7 @@ public class SaveData : MonoBehaviour
             ""+createdbuilding.name,
             ""+createdbuilding.name.Substring(0,1),
             ""+createdbuilding.transform.localPosition.x,
+            ""+createdbuilding.transform.localPosition.y,
             ""+createdbuilding.transform.localPosition.z
             };
             string saveAttributes = string.Join(ATTRIBUTE_SEPERATOR,contents);
@@ -44,8 +45,7 @@ public class SaveData : MonoBehaviour
                   
     }
     public void Load(){
-        List<GameObject> createdbuildings = buildingPlacement.getCreatedBuildings();
-        foreach (GameObject createdbuilding in createdbuildings){ Destroy(createdbuilding); }
+        buildingPlacement.clearBuilding();
         string saveData = File.ReadAllText(Application.dataPath + "/save.txt");
         if(saveData != null && saveData != ""){
             string[] saveObjects = saveData.Split(new[]{OBJECT_SEPERATOR},System.StringSplitOptions.None);
@@ -53,7 +53,7 @@ public class SaveData : MonoBehaviour
             foreach(string d in saveObjects)
             {
                 dataObjects = d.Split(new[]{ATTRIBUTE_SEPERATOR},System.StringSplitOptions.None);
-                buildingPlacement.loadBuildings(dataObjects[0],findBuilding(dataObjects[1]),dataObjects[2],dataObjects[3]);
+                buildingPlacement.loadBuildings(dataObjects[0],findBuilding(dataObjects[1]),dataObjects[2],dataObjects[3],dataObjects[4]);
             }
         }
                   
@@ -64,7 +64,7 @@ public class SaveData : MonoBehaviour
          switch(bt){
             case ("t"):
                 return buildings[0];
-            case ("r"):
+            case ("a"):
                 return buildings[1];
             default:
                 return buildings[2];

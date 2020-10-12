@@ -109,12 +109,19 @@ public class BuildingPlacement : MonoBehaviour
     public List<GameObject> getCreatedBuildings(){
          return createdbuildings; 
     }
-    
-    public void loadBuildings(string name, GameObject building, string px, string pz){
+
+    public void clearBuilding(){
+         foreach (Transform child in transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+        createdbuildings.Clear();
+    }
+    public void loadBuildings(string name, GameObject building, string px, string py,string pz){
         GameObject loadBuilding = (GameObject)Instantiate(building);
         loadBuilding.name  = name;
         loadBuilding.transform.parent = gameObject.transform;
-        loadBuilding.transform.localPosition = new Vector3(float.Parse(px),(float)0.5, float.Parse(pz));
+        loadBuilding.transform.localPosition = new Vector3(float.Parse(px),float.Parse(py), float.Parse(pz));
+        createdbuildings.Add(loadBuilding);
         hasPlaced = true;
     }
 
